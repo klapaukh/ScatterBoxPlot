@@ -87,3 +87,5 @@ popViewport()
 pushViewport(vplayout(2, 2))
 grid.draw(ggplotGrob(plot3))
 popViewport(2)
+grid.rect(x = 0.5, y = 0.5, height = .995, width = .995, default.units = "npc", 
+      gp = gpar(col="black", fill = NA, lwd = 1))
