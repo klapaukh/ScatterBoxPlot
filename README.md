@@ -2,9 +2,9 @@
 
 ####Using ggplot2 to draw a scatterplot and the two marginal boxplots
 
-This repository contains [`R`](http://www.cran.r-project.org/) code for a scatterplot and the two marginal boxplots. The separate graphs (a scatterplot and two boxplots) are drawn using the [`ggplot2`](http://cran.r-project.org/web/packages/ggplot2/) package. The three graphs are combined into one chart using functions from the [`grid`](http://stat.ethz.ch/R-manual/R-patched/library/grid/html/00Index.html)
+This repository contains [`R`](http://www.cran.r-project.org/) code to draw a scatterplot and the two marginal boxplots. The separate graphs (a scatterplot and two boxplots) are drawn using the [`ggplot2`](http://cran.r-project.org/web/packages/ggplot2/) package. The three graphs are combined into one chart using functions from the [`grid`](http://stat.ethz.ch/R-manual/R-patched/library/grid/html/00Index.html) package.
 
-It needs some work, but for now, it is working. If I get time, I'll come back to it. 
+It needs some work to generalise it, but for now, it is working on the data at hand. If I get time, I'll come back to it. 
 
 The data are taken from a survey that was part of a three-year study investigating the use of action research for building and sustaining professional learning communities for primary school teachers in remote areas of Papua New Guinea. The project was conducted between 2010 and 2012. It was funded by the Australian Development Research Awards (ADRA) and is entitled, *Identifying strategies to sustain professional learning communities for teachers in remote primary schools in Papua New Guinea*. The project was conducted by researchers from the National Research Institute in Port Moresby (Patricia Paraide and Medi Reta), The University of Queensland in Brisbane (Eileen Honan and Sandy Muspratt), and Deakin University in Geelong (Terry Evans).
 
