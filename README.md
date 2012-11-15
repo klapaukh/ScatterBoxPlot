@@ -8,7 +8,7 @@ It needs some work, but for now, it is working. If I get time, I'll come back to
 
 The data are taken from a survey that was part of a three-year study investigation the use of action research for building and sustaining professional learning communities for primary school teachers in remote areas of Papua New Guinea. The project was conducted between 2010 and 2012. It was funded by the Australian Development Research Awards (ADRA) and is entitled, *Identifying strategies to sustain professional learning communities for teachers in remote primary schools in Papua New Guinea*. The project was conducted by researchers from the National Research Institute in Port Moresby (Patricia Paraide and Medi Reta), The University of Queensland in Brisbane (Eileen Honan and Sandy Muspratt), and Deakin University in Geelong (Terry Evans).
 
-The data used here are contained in [adra.RData]. Before running the code, make sure the data file is in you working directory.
+The data used here are contained in `adra.RData`. Before running the code, make sure the data file is in you working directory.
 
 [![ScatterBoxPlot](https://dl.dropbox.com/u/16954433/ScatterBox.png)](https://dl.dropbox.com/u/16954433/ScatterBox.png)
 
