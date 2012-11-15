@@ -10,6 +10,8 @@ The data are taken from a survey that was part of a three-year study investigati
 
 The data used here are contained in `adra.RData`. Before running the code, make sure the data file is in your working directory.
 
+The data are teachers' responses to two questions concerned with the effects of professional learning activities: "To what extent have your classroom practices changed?"; and "To what extent have you shared with others what you learned?". Teachers responded on eleven-point scales. For the first question, the end points of the scale were labelled: 0 = "None" and 10 = "Significantly". For the second question, the end points were labelled: 0 = "Shared nothing" and 10 = "Shared everything".  
+
 [![ScatterBoxPlot](https://dl.dropbox.com/u/16954433/ScatterBox.png)](https://dl.dropbox.com/u/16954433/ScatterBox.png)
 
 
