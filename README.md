@@ -2,7 +2,7 @@
 
 ####Using ggplot2 to draw a scatterplot and the two marginal boxplots
 
-This repository contains [`R`](http://www.cran.r-project.org/) code to draw a scatterplot and the two marginal boxplots. The separate graphs (a scatterplot and two boxplots) are drawn using the [`ggplot2`](http://cran.r-project.org/web/packages/ggplot2/) package. The three graphs are combined into one chart using functions from the [`grid`](http://stat.ethz.ch/R-manual/R-patched/library/grid/html/00Index.html) package.
+This  repository contains [`R`](http://www.cran.r-project.org/) code to draw a scatterplot and the two marginal boxplots. The separate graphs (a scatterplot and two boxplots) are drawn using the [`ggplot2`](http://cran.r-project.org/web/packages/ggplot2/) package. The three graphs are combined into one chart using functions from the [`grid`](http://stat.ethz.ch/R-manual/R-patched/library/grid/html/00Index.html) package.
 
 It needs some work to generalise it, but for now, it is working with the data at hand. If I get time, I'll come back to it. 
 
