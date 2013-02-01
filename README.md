@@ -12,7 +12,8 @@ The data are teachers' responses to two questions concerned with the effects of 
 
 The chart was drawn using `Scatterplot with marginal boxplots.R` 
 
-[![ScatterBoxplot](https://github.com/SandyMuspratt/ScatterBoxPlot/ScatterBoxplot.png)
+
+[![ScatterBoxplot](https://github.com/SandyMuspratt/ScatterBoxPlot/blob/master/ScatterBoxplot.png)
 
 
 
