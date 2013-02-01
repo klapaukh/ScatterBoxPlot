@@ -13,3 +13,4 @@ The data are teachers' responses to two questions concerned with the effects of 
 The chart was drawn using `Scatterplot with marginal boxplots.R` 
 
 [![ScatterBoxplot](https://dl.dropbox.com/u/16954433/ScatterBoxplot.png)](https://dl.dropbox.com/u/16954433/ScatterBoxplot.png)
+
