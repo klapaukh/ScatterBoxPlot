@@ -56,7 +56,7 @@ p3 <- ggplot(adra, aes(x = q20)) +
       panel.border = element_rect(colour = NA),
       plot.margin= unit(c(.1, 1, 0.5, -1), "lines"))
 
-
+# Get the gtables
 gt1 <- ggplot_gtable(ggplot_build(p1))
 gt2 <- ggplot_gtable(ggplot_build(p2))
 gt3 <- ggplot_gtable(ggplot_build(p3))
@@ -87,3 +87,4 @@ grid.draw(gt)
 
 grid.rect(x = 0.5, y = 0.5, height = .995, width = .995, default.units = "npc",
       gp = gpar(col="black", fill = NA, lwd = 1)) 
+

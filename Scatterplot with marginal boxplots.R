@@ -25,7 +25,7 @@ p1 <- ggplot(adra, aes(q19, q20)) +
     panel.border = element_rect(colour = "black"),
     axis.title.x = element_text(face = "bold"),
     axis.title.y = element_text(face = "bold", angle = 90),
-    plot.margin= unit(c(.1, .1, .5, .5), "lines"))
+    plot.margin= unit(c(.2, .2, .5, .5), "lines"))
 
 # Horizontal marginal boxplot - to appear at the top of the chart
 p2 <- ggplot(adra, aes(x = factor(1), y = q19)) + 
@@ -42,7 +42,7 @@ p2 <- ggplot(adra, aes(x = factor(1), y = q19)) +
      axis.title = element_blank(),
      axis.ticks =  element_blank(),
      panel.border = element_rect(colour = NA),
-     plot.margin= unit(c(1, .1, -1, 0.5), "lines"))
+     plot.margin= unit(c(1, .2, -1, 0.5), "lines"))
 
 # Vertical marginal boxplot - to appear at the right of the chart
 p3 <- ggplot(adra, aes(x = factor(1), y = q20)) + 
@@ -58,9 +58,9 @@ p3 <- ggplot(adra, aes(x = factor(1), y = q20)) +
       axis.title = element_blank(),
       axis.ticks =  element_blank(),
       panel.border = element_rect(colour = NA),
-      plot.margin= unit(c(.1, 1, 0.5, -1), "lines"))
+      plot.margin= unit(c(.2, 1, 0.5, -1), "lines"))
 
-
+# Get the gtables
 gt1 <- ggplot_gtable(ggplot_build(p1))
 gt2 <- ggplot_gtable(ggplot_build(p2))
 gt3 <- ggplot_gtable(ggplot_build(p3))
@@ -85,9 +85,11 @@ gt <- gtable_add_grob(gt, gt1, 2, 1)
 gt <- gtable_add_grob(gt, gt2, 1, 1)
 gt <- gtable_add_grob(gt, gt3, 2, 2)
 
+#png("ScatterBoxplot.png", 550, 550, "px")
 # And render the plot
 grid.newpage()
 grid.draw(gt)
 
 grid.rect(x = 0.5, y = 0.5, height = .995, width = .995, default.units = "npc",
       gp = gpar(col="black", fill = NA, lwd = 1)) 
+#dev.off()

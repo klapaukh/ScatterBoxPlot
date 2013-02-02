@@ -10,7 +10,8 @@ The data used here are contained in the `adra.RData` file. Before running the co
 
 The data are teachers' responses to two questions concerned with the effects of professional learning activities: "To what extent have your classroom practices changed?"; and "To what extent have you shared with others what you learned?". Teachers responded on eleven-point scales. For the first question, the end points of the scale were labelled: 0 = "None" and 10 = "Significantly". For the second question, the end points were labelled: 0 = "Shared nothing" and 10 = "Shared everything".  
 
-The chart was drawn using `Scatterplot with marginal boxplots.R` 
+The chart was drawn using [`Scatterplot with marginal boxplots.R`](https://github.com/SandyMuspratt/ScatterBoxPlot/blob/master/Scatterplot with marginal boxplots.R). Similar logic applies to scatterplots with marginal histograms see [`Scatterplot with marginal histograms.R`](https://github.com/SandyMuspratt/ScatterBoxPlot/blob/master/Scatterplot with marginal histograms.R) and scatterplots with marginal density plots see [`Scatterplot with marginal density plot.R`](https://github.com/SandyMuspratt/ScatterBoxPlot/blob/master/Scatterplot with marginal density plots.R). 
 
 [![ScatterBoxplot](https://dl.dropbox.com/u/16954433/ScatterBoxplot.png)](https://dl.dropbox.com/u/16954433/ScatterBoxplot.png)
+
 
