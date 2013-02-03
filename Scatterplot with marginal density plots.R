@@ -2,7 +2,7 @@
 library(ggplot2)
 library(gtable)
 
-load("adra.RData")
+adra = read.csv("adra.csv")
 
 # Calculate correlation between the two variables
 cor <- cor(adra$q19, adra$q20)

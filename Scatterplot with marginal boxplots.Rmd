@@ -1,0 +1,293 @@
+Scatterplot with marginal boxplots
+========================================================
+
+Using ggplot2 to draw a scatterplot with the two marginal boxplots
+-------------------------------------------
+
+```{r setup, echo = FALSE}
+opts_knit$set(upload.fun = imgur_upload, base.url = NULL, out.format = "jeykll") # upload all images to imgur.com
+opts_chunk$set(comment=NA, tidy = TRUE, cache = TRUE)
+````
+
+Drawing a scatterplot with the marginal boxplots (or marginal histograms or marginal density plots) has always been a bit tricky (well for me anyway). The approach I take here is, first, to draw the three separate plots using [ggplot2](http://www.cran.r-project.org/web/packages/ggplot2):
+- the scatterplot;
+- the horizontal boxplot to appear in the top margin;
+- the vertical scatterplot to appear in the right margin;
+
+then, second, to combine the three plots using functions from the [gtable](http://www.cran.r-project.org/web/packages/gtable) package. The difficulty lies with ensuring that the tick mark labels in the scatterplot panel and in the top marginal boxplot panel take up the same space.
+
+To draw the following chart, I borrowed and modified code from [here](https://groups.google.com/forum/?fromgroups=#!topic/ggplot2/2MNoYtX8EEY) and from [here](http://stackoverflow.com/questions/13294952/left-align-two-graph-edges-ggplot). The final [code](https://github.com/SandyMuspratt/ScatterBoxPlot/blob/master/Scatterplot with marginal boxplots.R) and [data]() are available on [GitHub](https://github.com/SandyMuspratt/ScatterBoxPlot).
+
+```{r ScatterBoxPlot, results = "hide", echo = FALSE, message=FALSE}
+
+library(ggplot2)
+library(gtable)
+
+load("adra.RData")
+
+# Calculate correlation between the two variables
+cor <- cor(adra$q19, adra$q20)
+
+# Main scatterplot (with correlation insert)
+p1 <- ggplot(adra, aes(q19, q20)) + 
+   geom_jitter(pch = 20, size = 1, colour = "red",
+      position = position_jitter(width = 0.1, height = 0.1)) +
+   scale_x_continuous("Extent to which classroom practices have changed", 
+      breaks = 0:10, expand = c(0, 0)) +
+   scale_y_continuous("Extent to which you shared what you learned with others", 
+      breaks = 0:10, expand = c(0, 0)) +
+   geom_text(x = (0.4 + 2.1)/2, y = (9.1 + 9.9)/2,
+      label = paste("r = ", round(cor, 2), sep = ""), size = 4) +
+   geom_rect(xmin = .4, xmax = 2.1, ymin = 9.1, ymax = 9.9, colour = "black", fill = NA) +
+   expand_limits(x = c(-0.75, 10.75), y = c(-0.75, 10.75))  +
+   theme_bw() +
+   theme(panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.border = element_rect(colour = "black"),
+    axis.title.x = element_text(face = "bold"),
+    axis.title.y = element_text(face = "bold", angle = 90),
+    plot.margin= unit(c(.2, .2, .5, .5), "lines"))
+
+# Horizontal marginal boxplot - to appear at the top of the chart
+p2 <- ggplot(adra, aes(x = factor(1), y = q19)) + 
+    geom_boxplot(width = .8, fill = "skyblue", outlier.colour = NA) + 
+    geom_jitter(pch = 20, size = 1, colour = "red", alpha = .3,
+    position = position_jitter(width = 0.15, height = 0.15)) +
+    scale_y_continuous(breaks = 0:10, expand = c(0, 0)) +
+    expand_limits(y = c(-0.75, 10.75))  +
+    coord_flip() + 
+    theme_bw() + 
+    theme(panel.grid.minor = element_blank(),
+     panel.grid.major = element_blank(),
+     axis.text = element_blank(),
+     axis.title = element_blank(),
+     axis.ticks =  element_blank(),
+     panel.border = element_rect(colour = NA),
+     plot.margin= unit(c(1, .2, -1, 0.5), "lines"))
+
+# Vertical marginal boxplot - to appear at the right of the chart
+p3 <- ggplot(adra, aes(x = factor(1), y = q20)) + 
+     geom_boxplot(width = .8, fill = "skyblue", outlier.colour = NA) +
+     geom_jitter(pch = 20, size = 1, colour = "red", alpha = .3,
+     position = position_jitter(width = 0.15, height = 0.15)) +
+     scale_y_continuous(breaks = 0:10, expand = c(0, 0)) +
+     expand_limits(y = c(-0.75, 10.75))  +
+     theme_bw() + 
+     theme(panel.grid.minor = element_blank(),
+      panel.grid.major = element_blank(),
+      axis.text = element_blank(),
+      axis.title = element_blank(),
+      axis.ticks =  element_blank(),
+      panel.border = element_rect(colour = NA),
+      plot.margin= unit(c(.2, 1, 0.5, -1), "lines"))
+
+# Get the gtables
+gt1 <- ggplot_gtable(ggplot_build(p1))
+gt2 <- ggplot_gtable(ggplot_build(p2))
+gt3 <- ggplot_gtable(ggplot_build(p3))
+
+# Get maximum widths and heights for x-axis and y-axis title and text
+maxWidth = unit.pmax(gt1$widths[2:3], gt2$widths[2:3])
+maxHheight = unit.pmax(gt1$heights[4:5], gt3$heights[4:5])
+
+# Set the maximums in the gtables for gt1, gt2 and gt3
+gt1$widths[2:3] <- as.list(maxWidth)
+gt2$widths[2:3] <- as.list(maxWidth)
+
+gt1$heights[4:5] <- as.list(maxWidth)
+gt3$heights[4:5] <- as.list(maxWidth)
+
+# Combine the scatterplot with the two marginal boxplots
+# Create a new gtable
+gt <- gtable(widths = unit(c(7, 1), "null"), height = unit(c(1, 7), "null"))
+
+# Instert gt1, gt2 and gt3 into the new gtable
+gt <- gtable_add_grob(gt, gt1, 2, 1)
+gt <- gtable_add_grob(gt, gt2, 1, 1)
+gt <- gtable_add_grob(gt, gt3, 2, 2)
+
+# And render the plot
+grid.newpage()
+grid.draw(gt)
+
+grid.rect(x = 0.5, y = 0.5, height = .995, width = .995, default.units = "npc",
+      gp = gpar(col="black", fill = NA, lwd = 1)) 
+#dev.off()
+````
+
+### Drawing the plot
+This example uses the `mtcars` dataframe.
+Load the ggplot2 and gtable package and the mtcars dataframe.
+
+```{r load_package, message=FALSE}
+library(ggplot2)
+library(gtable)
+data(mtcars)
+```
+
+#### Draw the scatterplot.
+The margins are adjusted so that the spaces between the panels is reduced.
+Also, there is an ever-so-slight mismatch of the gridlines across the panels. The way to fix it is to remove the offset on each axis (`expand = c(0, 0)`) , then select an offset of your choice (`expand_limits(...)`). There are similar adjustments made to the marginal plots.
+
+```{r scatterplot}
+p1 <- ggplot(mtcars, aes(mpg, hp)) +  
+   geom_point() +  
+   scale_x_continuous(expand = c(0, 0)) +
+   scale_y_continuous(expand = c(0, 0)) +
+   expand_limits(y = c(min(mtcars$hp) - .1*diff(range(mtcars$hp)), 
+    max(mtcars$hp) + .1*diff(range(mtcars$hp))))  +
+   expand_limits(x = c(min(mtcars$mpg) - .1*diff(range(mtcars$mpg)), 
+      max(mtcars$mpg) + .1*diff(range(mtcars$mpg))))  +
+  theme(plot.margin= unit(c(.2, .2, .5, .5), "lines"))
+```
+
+#### Draw the marginal boxplots
+Note the margins and axis offsets. Also, the tick mark labels and axis titles for the x-axis and the y-axis are removed. 
+
+```{r marginal_boxplots}
+# Horizontal marginal boxplot - to appear at the top of the chart
+p2 <- ggplot(mtcars, aes(x = factor(1), y = mpg)) + 
+  geom_boxplot(outlier.colour = NA) +
+  geom_jitter(position = position_jitter(width = 0.05)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  expand_limits(y = c(min(mtcars$mpg) - .1*diff(range(mtcars$mpg)), 
+                      max(mtcars$mpg) + .1*diff(range(mtcars$mpg))))  +
+  coord_flip() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks =  element_blank(),
+        plot.margin= unit(c(1, .2, -.5, 0.5), "lines"))
+
+# Vertical marginal boxplot - to appear at the right of the chart
+p3 <- ggplot(mtcars, aes(x = factor(1), y = hp)) + 
+  geom_boxplot(outlier.colour = NA) +
+  geom_jitter(position = position_jitter(width = 0.05)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  expand_limits(y = c(min(mtcars$hp) - .1*diff(range(mtcars$hp)), 
+                      max(mtcars$hp) + .1*diff(range(mtcars$hp))))  +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks =  element_blank(),
+        plot.margin= unit(c(.2, 1, 0.5, -.5), "lines"))
+```
+
+#### Get the gtables for the three plots
+```{r get_gtables}
+gt1 <- ggplot_gtable(ggplot_build(p1))
+gt2 <- ggplot_gtable(ggplot_build(p2))
+gt3 <- ggplot_gtable(ggplot_build(p3))
+```
+
+
+#### Get and set the maximum widths and heights for x-axis and y-axis titles and text
+The gtables store information required to draw the plots, including the widths of the space occupied by the y-axis titles and tick mark labels. The code gets the maximum widths of these spaces for the scatterplot and the horizontal marginal boxplot (gt1 and gt2), then sets that maximum as the width in the two gtables. So that there are no problems with the vertical alignment of the scatterplot and the vertical marginal boxplot, the heights are similarly set for gt1 and gt3. 
+
+```{r Get_and_set_maximum_widths}
+# Get maximum widths and heights
+maxWidth = unit.pmax(gt1$widths[2:3], gt2$widths[2:3])
+maxHheight = unit.pmax(gt1$heights[4:5], gt3$heights[4:5])
+
+# Set the maximums in the gtables for gt1, gt2 and gt3
+gt1$widths[2:3] <- as.list(maxWidth)
+gt2$widths[2:3] <- as.list(maxWidth)
+
+gt1$heights[4:5] <- as.list(maxWidth)
+gt3$heights[4:5] <- as.list(maxWidth)
+```
+
+#### Combine the scatterplot with the two marginal boxplots
+The following code creates a new gtable (gt), inserts the modified gt1, gt2 and gt3 into the new gtable, then renders the plot according to the information stored in the new gtable. Finally, a box is drawn around the combined plot. 
+
+```{r combine_scatterplot_and_marginal_boxplots}
+# Create a new gtable
+gt <- gtable(widths = unit(c(7, 1), "null"), height = unit(c(1, 7), "null"))
+
+# Instert gt1, gt2 and gt3 into the new gtable
+gt <- gtable_add_grob(gt, gt1, 2, 1)
+gt <- gtable_add_grob(gt, gt2, 1, 1)
+gt <- gtable_add_grob(gt, gt3, 2, 2)
+
+
+# And render the plot
+grid.newpage()
+grid.draw(gt)
+
+grid.rect(x = 0.5, y = 0.5, height = .995, width = .995, default.units = "npc",
+          gp = gpar(col="black", fill = NA, lwd = 1)) 
+```
+
+
+Similar logic applies to the drawing of marginal density plots.
+
+```{r marginal_density_plots}
+# Main scatterplot
+p1 <- ggplot(mtcars, aes(mpg, hp)) + 
+  geom_point() +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  expand_limits(y = c(min(mtcars$hp) - .1*diff(range(mtcars$hp)), 
+                      max(mtcars$hp) + .1*diff(range(mtcars$hp))))  +
+  expand_limits(x = c(min(mtcars$mpg) - .1*diff(range(mtcars$mpg)), 
+                      max(mtcars$mpg) + .1*diff(range(mtcars$mpg))))  +
+  theme(plot.margin= unit(c(.2, .2, .5, .5), "lines"))
+  
+
+# Horizontal marginal density plot - to appear at the top of the chart
+p2 <- ggplot(mtcars, aes(x = mpg)) + 
+  geom_density() +
+  scale_x_continuous(expand = c(0, 0)) +
+  expand_limits(x = c(min(mtcars$mpg) - .1*diff(range(mtcars$mpg)), 
+                      max(mtcars$mpg) + .1*diff(range(mtcars$mpg))))  +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks =  element_blank(),
+        plot.margin= unit(c(1, .2, -.5, 0.5), "lines"))
+                 
+# Vertical marginal density plot - to appear at the right of the chart
+p3 <- ggplot(mtcars, aes(x = hp)) + 
+  geom_density() +
+  scale_x_continuous(expand = c(0, 0)) +
+  expand_limits(x = c(min(mtcars$hp) - .1*diff(range(mtcars$hp)), 
+                      max(mtcars$hp) + .1*diff(range(mtcars$hp))))  +
+  coord_flip() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks =  element_blank(),
+        plot.margin= unit(c(.2, 1, 0.5, -.5), "lines"))
+
+# Get the gtables
+gt1 <- ggplot_gtable(ggplot_build(p1))
+gt2 <- ggplot_gtable(ggplot_build(p2))
+gt3 <- ggplot_gtable(ggplot_build(p3))
+
+# Get maximum widths and heights for x-axis and y-axis title and text
+maxWidth = unit.pmax(gt1$widths[2:3], gt2$widths[2:3])
+maxHheight = unit.pmax(gt1$heights[4:5], gt3$heights[4:5])
+
+# Set the maximums in the gtables for gt1, gt2 and gt3
+gt1$widths[2:3] <- as.list(maxWidth)
+gt2$widths[2:3] <- as.list(maxWidth)
+
+gt1$heights[4:5] <- as.list(maxWidth)
+gt3$heights[4:5] <- as.list(maxWidth)
+
+# Combine the scatterplot with the two marginal boxplots   
+# Create a new gtable
+gt <- gtable(widths = unit(c(7, 2), "null"), height = unit(c(2, 7), "null"))
+
+# Instert gt1, gt2 and gt3 into the new gtable
+gt <- gtable_add_grob(gt, gt1, 2, 1)
+gt <- gtable_add_grob(gt, gt2, 1, 1)
+gt <- gtable_add_grob(gt, gt3, 2, 2)
+
+# And render the plot
+grid.newpage()
+grid.draw(gt)
+
+grid.rect(x = 0.5, y = 0.5, height = .995, width = .995, default.units = "npc",
+          gp = gpar(col="black", fill = NA, lwd = 1)) 
+```
+
+
+
+
