@@ -47,14 +47,14 @@ gt3 <- ggplot_gtable(ggplot_build(p3))
 
 # Get maximum widths and heights for x-axis and y-axis title and text
 maxWidth = unit.pmax(gt1$widths[2:3], gt2$widths[2:3])
-maxHheight = unit.pmax(gt1$heights[4:5], gt3$heights[4:5])
+maxHeight = unit.pmax(gt1$heights[4:5], gt3$heights[4:5])
 
 # Set the maximums in the gtables for gt1, gt2 and gt3
 gt1$widths[2:3] <- as.list(maxWidth)
 gt2$widths[2:3] <- as.list(maxWidth)
 
-gt1$heights[4:5] <- as.list(maxWidth)
-gt3$heights[4:5] <- as.list(maxWidth)
+gt1$heights[4:5] <- as.list(maxHeight)
+gt3$heights[4:5] <- as.list(maxHeight)
 
 # Combine the scatterplot with the two marginal boxplots
 # Create a new gtable
