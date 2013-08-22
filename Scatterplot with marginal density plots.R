@@ -13,7 +13,7 @@ marginalDensityPlot <- function (df,x, y){
 #   scale_y_continuous("Extent to which you shared what you learned with others", 
 #      breaks = 0:10, expand = c(0,0)) +
 #   geom_rect(xmin = .4, xmax = 2.1, ymin = 9.1, ymax = 9.9, colour = "black", fill = NA) +
-    expand_limits(x = c(-0.75, 10.75), y = c(-0.75, 10.75))  +
+#    expand_limits(x = c(-0.75, 10.75), y = c(-0.75, 10.75))  +
     theme_bw() +
     theme(panel.grid.minor = element_blank(),
       panel.grid.major = element_blank(),
@@ -26,7 +26,7 @@ marginalDensityPlot <- function (df,x, y){
   p2 <- ggplot(df, aes(x = eval(xval)), environment=environment()) + 
     geom_density(fill = "skyblue") + 
 #    scale_x_continuous(breaks = 0:10, expand = c(0, 0)) +
-    expand_limits(x = c(-0.75, 10.75))  +
+#    expand_limits(x = c(-0.75, 10.75))  +
     theme_bw() + 
     theme(panel.grid.minor = element_blank(),
       panel.grid.major = element_blank(),
